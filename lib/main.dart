@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:mezcreen/env.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:mezcreen/s1.dart';
 
 import 'package:mezcreen/sampleData.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: _title,
-      home: RoomsPage(),
+      home: HomePage(),
     );
   }
 }
@@ -180,4 +181,5 @@ class _DevicesPageState extends State<DevicesPage> {
       ),
     );
   }
+
 }
