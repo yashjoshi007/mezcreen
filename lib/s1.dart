@@ -114,7 +114,7 @@ class _HomePageState extends State<HomePage> {
 
     // Set the values for the child node
     dataRef.set({
-      "textField1Value": _tex,
+      "textField1Value": textField1Value,
       "textField2Value": textField2Value,
       "dropdownValue": dropdownValue,
     }).then((value) {
