@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,10 @@ import 'package:mezcreen/components/container.dart';
 
 import 'components/dialog.dart';
 
+
+
+
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -13,9 +19,19 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+StreamController<DataSnapshot> _streamController = StreamController();
+DatabaseReference _databaseReference = FirebaseDatabase.instance.reference();
+
+
+
+
+
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    _databaseReference.onValue.listen((event) {
+      _streamController.add(event.snapshot);
+    });
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -92,37 +108,26 @@ class _HomePageState extends State<HomePage> {
                   },
                 );
 
-              })
+              }),
+          StreamBuilder(
+            stream: _streamController.stream,
+            builder: (BuildContext context, AsyncSnapshot<DataSnapshot> snapshot) {
+              if (snapshot.hasData) {
 
+                return Text(snapshot.data.value.toString());
+              } else {
+                // If there's no data yet, show a loading indicator
+                return CircularProgressIndicator();
+              }
+            },
 
-
-
-
-
-            ],
+          )],
           ),
         ),
       ),
     );
   }
-  final DatabaseReference databaseReference = FirebaseDatabase.instance.reference();
 
-// Define a function to upload the data to the database
-  void uploadDataToFirebase(String textField1Value, String textField2Value, String dropdownValue) {
-    // Define a new child node under the "data" node with a unique ID
-    DatabaseReference dataRef = databaseReference.child("data").push();
-
-    // Set the values for the child node
-    dataRef.set({
-      "textField1Value": textField1Value,
-      "textField2Value": textField2Value,
-      "dropdownValue": dropdownValue,
-    }).then((value) {
-      print("Data uploaded to Firebase");
-    }).catchError((error) {
-      print("Failed to upload data: $error");
-    });
-  }
 }
 
 
